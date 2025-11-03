@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
         ->controller(BookingController::class)
         ->group(function () {
             Route::get('/manage-booking', 'manageBooking')->name('manage');
+            Route::post('/store', 'storeBooking')->name('store');
+            Route::delete('/{uuid}/delete', 'destroy')->name('destroy');
+            Route::get('/{uuid}/approve', 'approve')->name('approve');
+            Route::get('/{uuid}/reject', 'reject')->name('reject');
         });
 
     Route::prefix('rooms')
@@ -39,6 +43,8 @@ Route::middleware('auth')->group(function () {
         ->controller(RoomController::class)
         ->group(function () {
             Route::get('/manage-room', 'manageRoom')->name('manage');
+            Route::post('/store', 'store')->name('store');
+            Route::delete('/{uuid}/delete', 'destroy')->name('destroy');
         });
 
     Route::prefix('departments')
@@ -46,5 +52,7 @@ Route::middleware('auth')->group(function () {
         ->controller(DepartmentController::class)
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::post('/store', 'store')->name('store');
+            Route::delete('/{uuid}/destroy', 'destroy')->name('destroy');
         });
 });

@@ -8,15 +8,32 @@
                 class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">➕ Tambah Departemen </button>
         </div><!-- Add Department Form -->
         <div id="department-form" class=" mb-6 p-4 bg-gray-50 rounded-lg">
-            <form id="add-department-form" class="flex gap-4 items-end">
-                <div class="flex-1"><label for="department-name"
-                        class="block text-sm font-medium text-gray-700 mb-2">Nama Departemen</label><input type="text"
-                        id="department-name" required
+            <form id="add-department-form"
+                action="{{ route('departments.store') }}"
+                method="POST"
+                class="flex gap-4 items-end">
+                @csrf
+                <div class="flex-1">
+                    <label for="department-name" class="block text-sm font-medium text-gray-700 mb-2">
+                        Nama Departemen
+                    </label>
+                    <input type="text"
+                        name="department"
+                        id="department-name"
+                        required
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Masukkan nama departemen">
-                </div><button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
-                    Simpan </button><button type="button" id="cancel-department"
-                    class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"> Batal </button>
+                </div>
+
+                <button type="submit"
+                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    Simpan
+                </button>
+
+                <button type="button" id="cancel-department"
+                    class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                    Batal
+                </button>
             </form>
         </div><!-- Departments List -->
         <div id="departments-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -25,27 +42,27 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const addBtn = document.getElementById('add-department-btn');
-    const formWrapper = document.getElementById('department-form');
-    const cancelBtn = document.getElementById('cancel-department');
-    const inputField = document.getElementById('department-name');
+    document.addEventListener('DOMContentLoaded', () => {
+        const addBtn = document.getElementById('add-department-btn');
+        const formWrapper = document.getElementById('department-form');
+        const cancelBtn = document.getElementById('cancel-department');
+        const inputField = document.getElementById('department-name');
 
-    // 🔹 Awalnya form disembunyikan
-    formWrapper.style.display = 'none';
-
-    // 🔹 Klik "Tambah Departemen" → tampilkan form
-    addBtn.addEventListener('click', () => {
-        formWrapper.style.display = 'block';
-        inputField.focus(); // otomatis fokus ke input
-    });
-
-    // 🔹 Klik "Batal" → sembunyikan form & kosongkan input
-    cancelBtn.addEventListener('click', () => {
+        // 🔹 Awalnya form disembunyikan
         formWrapper.style.display = 'none';
-        inputField.value = '';
+
+        // 🔹 Klik "Tambah Departemen" → tampilkan form
+        addBtn.addEventListener('click', () => {
+            formWrapper.style.display = 'block';
+            inputField.focus(); // otomatis fokus ke input
+        });
+
+        // 🔹 Klik "Batal" → sembunyikan form & kosongkan input
+        cancelBtn.addEventListener('click', () => {
+            formWrapper.style.display = 'none';
+            inputField.value = '';
+        });
     });
-});
 </script>
 
 @endsection
