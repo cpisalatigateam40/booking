@@ -69,18 +69,18 @@
                                         ❌ Tolak
                                     </button>
                                 </form>
-
-                                <form action="{{ route('booking.destroy', $booking->uuid) }}" method="POST"
-                                    onsubmit="return confirm('Hapus booking ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700">
-                                        🗑️ Hapus
-                                    </button>
-                                </form>
                             </div>
                         @endif
+
+                        <form action="{{ route('booking.destroy', $booking->uuid) }}" method="POST"
+                            onsubmit="return confirm('Hapus booking ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="mt-3 px-4 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700">
+                                🗑️ Hapus
+                            </button>
+                        </form>
                     </div>
                 @endforeach
             </div>
