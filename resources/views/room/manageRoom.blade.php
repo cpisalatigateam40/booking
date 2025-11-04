@@ -49,6 +49,24 @@
         </div>
         <!-- Rooms List -->
         <div id="rooms-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @forelse ($rooms as $room)
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+                    <div>
+                        <span class="font-medium">{{ $room->room }}</span>
+                        <p class="text-sm text-gray-600">Kapasitas: {{ $room->capacity }} orang</p>
+                    </div>
+                    <form action="{{ route('rooms.destroy', $room->uuid) }}" method="POST"
+                        onsubmit="return confirm('Yakin ingin menghapus ruangan ini?')" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                            🗑️ Hapus
+                        </button>
+                    </form>
+                </div>
+            @empty
+                <p class="text-gray-500 col-span-full text-center">Belum ada data ruangan.</p>
+            @endforelse
         </div>
     </div>
 </div>

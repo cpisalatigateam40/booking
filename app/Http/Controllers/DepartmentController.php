@@ -9,7 +9,8 @@ class DepartmentController extends Controller
 {
     public function index()
     {
-        return view('department.index');
+        $departments = Department::orderBy('department')->get();
+        return view('department.index', compact('departments'));
     }
 
     public function store(Request $request)
@@ -29,4 +30,19 @@ class DepartmentController extends Controller
         // Or if using AJAX:
         // return response()->json(['success' => true, 'data' => $department]);
     }
+
+    public function destroy($uuid)
+    {
+        $department = Department::where('uuid', $uuid)->first();
+
+        if (!$department) {
+            return redirect()->back()->with('error', 'Departemen tidak ditemukan.');
+        }
+
+        $department->delete();
+
+        return redirect()->back()->with('success', 'Departemen berhasil dihapus.');
+    }
+
+
 }

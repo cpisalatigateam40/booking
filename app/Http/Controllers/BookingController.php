@@ -9,10 +9,37 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('booking.index');
+        $query = Booking::with(['department', 'rooms'])
+            ->orderBy('date', 'desc')
+            ->orderBy('start_time', 'desc');
+
+        // 🔸 Filter Status
+        if ($request->filled('status')) {
+            $statusMap = [
+                'Menunggu' => '0',
+                'Disetujui' => '1',
+                'Ditolak' => '2',
+            ];
+            $statusValue = $statusMap[$request->status] ?? null;
+            if ($statusValue !== null) {
+                $query->where('status', $statusValue);
+            }
+        }
+
+        // 🔸 Filter Ruangan
+        if ($request->filled('room_uuid')) {
+            $query->where('room_uuid', $request->room_uuid);
+        }
+
+        $bookings = $query->paginate(5)->appends($request->query());
+
+        $rooms = \App\Models\Room::orderBy('room')->get();
+
+        return view('booking.index', compact('bookings', 'rooms'));
     }
+
 
     public function create()
     {
@@ -48,12 +75,21 @@ class BookingController extends Controller
             'status' => '0',
         ]);
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil diajukan.');
+        return redirect()
+        ->route('booking.index')
+        ->with('success', 'Peminjaman berhasil diajukan dan menunggu persetujuan.');
     }
 
-    public function manageBooking()
+    public function manageBooking(Request $request)
     {
-        return view('booking.manageBooking');
+        $bookings = Booking::with(['department', 'rooms'])
+        ->orderByRaw("FIELD(status, 0, 1, 2)")
+        ->orderBy('date', 'desc')
+        ->orderBy('start_time', 'desc')
+        ->paginate(5)
+        ->appends($request->query());
+
+        return view('booking.manageBooking', compact('bookings'));
     }
 
     public function approve($uuid)
@@ -77,4 +113,15 @@ class BookingController extends Controller
 
         return redirect()->back()->with('succes', 'Peminjaman berhasil diapprove');
     }
+
+    public function destroy($uuid)
+    {
+        $booking = Booking::firstWhere('uuid', $uuid);
+        if ($booking) {
+            $booking->delete();
+            return redirect()->back()->with('success', 'Booking berhasil dihapus.');
+        }
+        return redirect()->back()->with('error', 'Booking tidak ditemukan.');
+    }
+
 }

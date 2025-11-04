@@ -24,6 +24,7 @@ Route::prefix('rooms')
     ->controller(RoomController::class)
     ->group(function () {
         Route::get('/', 'schedule')->name('schedule');
+        Route::get('/availability', 'checkAvailability')->name('availability');
     });
 
 Route::middleware('auth')->group(function () {
@@ -34,8 +35,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/manage-booking', 'manageBooking')->name('manage');
             Route::post('/store', 'storeBooking')->name('store');
             Route::delete('/{uuid}/delete', 'destroy')->name('destroy');
-            Route::get('/{uuid}/approve', 'approve')->name('approve');
-            Route::get('/{uuid}/reject', 'reject')->name('reject');
+            Route::put('/{uuid}/approve', 'approve')->name('approve');
+            Route::put('/{uuid}/reject', 'reject')->name('reject');
         });
 
     Route::prefix('rooms')

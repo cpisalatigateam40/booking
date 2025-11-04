@@ -37,7 +37,22 @@
             </form>
         </div><!-- Departments List -->
         <div id="departments-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @forelse($departments as $dept)
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+                    <span class="font-medium">{{ $dept->department }}</span>
+                    <form action="{{ route('departments.destroy', $dept->uuid) }}" method="POST" onsubmit="return confirm('Yakin hapus departemen ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                            🗑️ Hapus
+                        </button>
+                    </form>
+                </div>
+            @empty
+                <p class="text-gray-500">Belum ada departemen.</p>
+            @endforelse
         </div>
+
     </div>
 </div>
 
