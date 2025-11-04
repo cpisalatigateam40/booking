@@ -109,7 +109,7 @@
             <div class="text-sm text-gray-500">
                 Total: 
                 <span id="approved-count" class="font-semibold text-gray-700">
-                    {{ $approvedBookings->total() }}
+                    {{ $approvedBookings->count() }}
                 </span> 
                 booking disetujui
             </div>
@@ -168,9 +168,12 @@
         </div>
     </div>
 
-    <div class="mt-6">
-        {{ $approvedBookings->links() }}
-    </div>
+    @if(method_exists($approvedBookings, 'links'))
+        <div class="mt-6">
+            {{ $approvedBookings->links('pagination::tailwind') }}
+        </div>
+    @endif
+
 
 
     </div>
